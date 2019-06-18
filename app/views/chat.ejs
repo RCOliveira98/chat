@@ -103,16 +103,15 @@
 		<nav class="navbar navbar-default navbar-fixed-bottom" role="navigation">
 			<div class="container">
 				<div class="panel-body campo-mensagem">
-					<form>
-						<div class="col-md-12">
-							<div class="input-group">
-								<input type="text" class="form-control" placeholder="Mensagem">
-								<span class="input-group-btn">
-									<button class="btn btn-default" type="button">></button>
-								</span>
-							</div>
+					<div class="col-md-12">
+						<div class="input-group">
+							<input type="text" class="form-control" placeholder="Digite Aqui sua mensagem" id='mensagem'>
+							<input type='hidden' class='form-control' value="<%=data_form.apelido%>" id='apelido'>
+							<span class="input-group-btn">
+								<button class="btn btn-default" type="button" id='btn-enviar'>></button>
+							</span>
 						</div>
-					</form>
+					</div>
 				</div>
 			</div>
 		</nav>		
@@ -121,11 +120,18 @@
 		<script src='/socket.io/socket.io.js'></script>
 		<script>
 		   var socket = io('http://localhost:3000');
+
+		   $('#btn-enviar').click(() =>{ 
+			   socket.emit('msgToServer', {apelido: $('#apelido').val(), contentMensagem: $('#mensagem').val()}
+			   );
+		   });
+
+
 		   socket.on('msgToClient', (dado)=> {
 			   var html = '';
 			   html += '<div class="dialogo">';
-						html += '<h4>'+ dado + '</h4>';
-						html += '<p> entrou no chat </p>';
+						html += '<h4>'+ dado.apelido + '</h4>';
+						html += '<p>'+ dado.contentMensagem + '</p>';
 			   html += '</div';
 
 			   $('#dialogos').append(html);
